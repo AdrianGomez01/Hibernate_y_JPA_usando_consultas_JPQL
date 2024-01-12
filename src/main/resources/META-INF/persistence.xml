@@ -7,6 +7,7 @@
         <class>bbdd.Desarrollador</class>
         <class>bbdd.Juego</class>
         <class>bbdd.JuegoDesarrollador</class>
+        <class>bbdd.JuegoDesarrolladorPK</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
