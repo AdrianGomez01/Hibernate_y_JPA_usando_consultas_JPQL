@@ -5,6 +5,8 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
 import java.sql.Date;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -69,6 +71,63 @@ public class Main {
             // Finalizamos la transacción
             em.getTransaction().commit();
 
+            // Menú de opciones
+            Scanner scanner = new Scanner(System.in);
+            int opcion;
+
+            do {
+                System.out.println("\n----- Menú de Consultas -----\n");
+                System.out.println("1. Mostrar todos los juegos");
+                System.out.println("2. Mostrar todos los desarrolladores");
+                System.out.println("3. Mostrar juegos desarrollados por un desarrollador específico");
+                System.out.println("4. Mostrar nombres de desarrolladores de un juego específico");
+                System.out.println("5. Actualizar el título de un juego");
+                System.out.println("6. Eliminar un juego");
+                System.out.println("7. Mostrar juegos lanzados antes de una fecha determinada");
+                System.out.println("8. Mostrar juegos lanzados después de una fecha determinada");
+                System.out.println("9. Mostrar juegos lanzados en un rango de fechas determinado");
+                System.out.println("10. Mostrar juegos lanzados en una plataforma determinada");
+                System.out.println("0. Salir");
+
+                System.out.print("Ingrese la opción deseada: ");
+                opcion = scanner.nextInt();
+                scanner.nextLine(); // Consumir el salto de línea después del nextInt
+
+                switch (opcion) {
+                    case 1:
+                        mostrarTodosLosJuegos();
+                        break;
+                    case 2:
+                        mostrarTodosLosDesarrolladores();
+                        break;
+                    case 3:
+                        mostrarJuegosPorDesarrollador();
+                        break;
+                    case 4:
+                        mostrarDesarrolladoresPorJuego();
+                        break;
+                    case 5:
+                        actualizarTituloDeJuego();
+                        break;
+                    case 6:
+                        eliminarJuego();
+                        break;
+                    case 7:
+                        mostrarJuegosAntesDeFecha();
+                        break;
+                    case 8:
+                        mostrarJuegosDespuesDeFecha();
+                        break;
+                    case 9:
+                        mostrarJuegosEnRangoDeFechas();
+                        break;
+                    case 10:
+                        mostrarJuegosPorPlataforma();
+                        break;
+                }
+
+            } while (opcion != 0);
+
 
         } catch (Exception e) {
             //Si hay algún problema con la transacción, hacemos un rollback al estado anterior
@@ -98,4 +157,60 @@ public class Main {
         return nuevoDesarrollador;
     }
 
+    // Métodos de consulta
+    private static void mostrarTodosLosJuegos() {
+        List<Juego> juegos = em.createNamedQuery("Juego.findAll", Juego.class).getResultList();
+        System.out.println("----- Todos los Juegos -----");
+        for (Juego juego : juegos) {
+            System.out.println(juego);
+        }
+    }
+
+    private static void mostrarTodosLosDesarrolladores() {
+        List<Desarrollador> desarrolladores = em.createNamedQuery("Desarrollador.findAll", Desarrollador.class).getResultList();
+        System.out.println("----- Todos los Desarrolladores -----");
+        for (Desarrollador desarrollador : desarrolladores) {
+            System.out.println(desarrollador);
+        }
+    }
+
+    private static void mostrarJuegosPorDesarrollador() {
+        // Implementar la consulta para mostrar juegos por desarrollador
+        // ...
+    }
+
+    private static void mostrarDesarrolladoresPorJuego() {
+        // Implementar la consulta para mostrar desarrolladores por juego
+        // ...
+    }
+
+    private static void actualizarTituloDeJuego() {
+        // Implementar la consulta para actualizar el título de un juego
+        // ...
+    }
+
+    private static void eliminarJuego() {
+        // Implementar la consulta para eliminar un juego
+        // ...
+    }
+
+    private static void mostrarJuegosAntesDeFecha() {
+        // Implementar la consulta para mostrar juegos antes de una fecha determinada
+        // ...
+    }
+
+    private static void mostrarJuegosDespuesDeFecha() {
+        // Implementar la consulta para mostrar juegos después de una fecha determinada
+        // ...
+    }
+
+    private static void mostrarJuegosEnRangoDeFechas() {
+        // Implementar la consulta para mostrar juegos en un rango de fechas determinado
+        // ...
+    }
+
+    private static void mostrarJuegosPorPlataforma() {
+        // Implementar la consulta para mostrar juegos por plataforma
+        // ...
+    }
 }
