@@ -2,6 +2,11 @@ package bbdd;
 
 import jakarta.persistence.*;
 
+@NamedQuery(
+        name = "Desarrollador.findAll",
+        query = "SELECT d FROM Desarrollador d"
+)
+
 @Entity
 public class Desarrollador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)

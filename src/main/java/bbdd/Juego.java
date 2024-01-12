@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
+@NamedQuery(
+        name = "Juego.findAll",
+        query = "SELECT j FROM Juego j"
+)
 
 @Entity
 public class Juego {

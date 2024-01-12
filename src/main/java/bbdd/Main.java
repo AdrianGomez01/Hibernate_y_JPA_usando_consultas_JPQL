@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Scanner;
 
+
 public class Main {
     public static void main(String[] args) {
 
@@ -159,58 +160,180 @@ public class Main {
 
     // Métodos de consulta
     private static void mostrarTodosLosJuegos() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
         List<Juego> juegos = em.createNamedQuery("Juego.findAll", Juego.class).getResultList();
-        System.out.println("----- Todos los Juegos -----");
+
+        if (!juegos.isEmpty()) {
+            System.out.println("----- Todos los Juegos -----");
+            for (Juego juego : juegos) {
+                System.out.println(juego);
+            }
+        } else {
+            System.out.println("No hay juegos registrados en la base de datos.");
+        }
+    }
+
+    private static void mostrarTodosLosDesarrolladores() {
+
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        List<Desarrollador> desarrolladores = em.createNamedQuery("Desarrollador.findAll", Desarrollador.class).getResultList();
+
+        if (!desarrolladores.isEmpty()) {
+            System.out.println("----- Todos los Desarrolladores -----");
+            for (Desarrollador desarrollador : desarrolladores) {
+                System.out.println(desarrollador);
+            }
+        } else {
+            System.out.println("No hay desarrolladores registrados en la base de datos.");
+        }
+    }
+
+    private static void mostrarJuegosPorDesarrollador() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese el ID del desarrollador: ");
+        int desarrolladorId = scanner.nextInt();
+        String jpql = "SELECT j FROM Juego j JOIN j.desarrolladora d WHERE d.id = :desarrolladorId";
+        List<Juego> juegos = em.createQuery(jpql, Juego.class)
+                .setParameter("desarrolladorId", desarrolladorId)
+                .getResultList();
+
+        System.out.println("----- Juegos desarrollados por el Desarrollador con ID " + desarrolladorId + " -----");
         for (Juego juego : juegos) {
             System.out.println(juego);
         }
     }
 
-    private static void mostrarTodosLosDesarrolladores() {
-        List<Desarrollador> desarrolladores = em.createNamedQuery("Desarrollador.findAll", Desarrollador.class).getResultList();
-        System.out.println("----- Todos los Desarrolladores -----");
-        for (Desarrollador desarrollador : desarrolladores) {
-            System.out.println(desarrollador);
+    private static void mostrarDesarrolladoresPorJuego() {
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese el ID del juego: ");
+        int juegoId = scanner.nextInt();
+
+        Juego juego = em.find(Juego.class, juegoId);
+        if (juego != null) {
+            System.out.println("----- Desarrolladores del Juego con ID " + juegoId + " -----");
+            for (Desarrollador desarrollador : juego.getDesarrolladora()) {
+                System.out.println(desarrollador);
+            }
+        } else {
+            System.out.println("No se encontró un juego con ID " + juegoId);
         }
     }
 
-    private static void mostrarJuegosPorDesarrollador() {
-        // Implementar la consulta para mostrar juegos por desarrollador
-        // ...
-    }
-
-    private static void mostrarDesarrolladoresPorJuego() {
-        // Implementar la consulta para mostrar desarrolladores por juego
-        // ...
-    }
-
     private static void actualizarTituloDeJuego() {
-        // Implementar la consulta para actualizar el título de un juego
-        // ...
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese el ID del juego a actualizar: ");
+        int juegoId = scanner.nextInt();
+        scanner.nextLine(); // Consumir el salto de línea después del nextInt
+
+        System.out.print("Ingrese el nuevo título del juego: ");
+        String nuevoTitulo = scanner.nextLine();
+
+        em.getTransaction().begin();
+        String jpql = "UPDATE Juego j SET j.titulo = :nuevoTitulo WHERE j.id = :juegoId";
+        em.createQuery(jpql)
+                .setParameter("nuevoTitulo", nuevoTitulo)
+                .setParameter("juegoId", juegoId)
+                .executeUpdate();
+        em.getTransaction().commit();
+
+        System.out.println("Título del juego actualizado con éxito.");
     }
 
     private static void eliminarJuego() {
-        // Implementar la consulta para eliminar un juego
-        // ...
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese el ID del juego a eliminar: ");
+        int juegoId = scanner.nextInt();
+
+        em.getTransaction().begin();
+        Juego juego = em.find(Juego.class, juegoId);
+        em.remove(juego);
+        em.getTransaction().commit();
+
+        System.out.println("Juego eliminado con éxito.");
     }
 
     private static void mostrarJuegosAntesDeFecha() {
-        // Implementar la consulta para mostrar juegos antes de una fecha determinada
-        // ...
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese la fecha límite (Formato: yyyy-MM-dd): ");
+        Date fechaLimite = Date.valueOf(scanner.nextLine());
+
+        String jpql = "SELECT j FROM Juego j WHERE j.fechaLanzamiento < :fechaLimite";
+        List<Juego> juegos = em.createQuery(jpql, Juego.class)
+                .setParameter("fechaLimite", fechaLimite)
+                .getResultList();
+
+        System.out.println("----- Juegos lanzados antes de " + fechaLimite + " -----");
+        for (Juego juego : juegos) {
+            System.out.println(juego);
+        }
     }
 
     private static void mostrarJuegosDespuesDeFecha() {
-        // Implementar la consulta para mostrar juegos después de una fecha determinada
-        // ...
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese la fecha de referencia (Formato: yyyy-MM-dd): ");
+        Date fechaReferencia = Date.valueOf(scanner.nextLine());
+
+        String jpql = "SELECT j FROM Juego j WHERE j.fechaLanzamiento > :fechaReferencia";
+        List<Juego> juegos = em.createQuery(jpql, Juego.class)
+                .setParameter("fechaReferencia", fechaReferencia)
+                .getResultList();
+
+        System.out.println("----- Juegos lanzados después de " + fechaReferencia + " -----");
+        for (Juego juego : juegos) {
+            System.out.println(juego);
+        }
     }
 
     private static void mostrarJuegosEnRangoDeFechas() {
-        // Implementar la consulta para mostrar juegos en un rango de fechas determinado
-        // ...
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese la fecha de inicio (Formato: yyyy-MM-dd): ");
+        Date fechaInicio = Date.valueOf(scanner.nextLine());
+        System.out.print("Ingrese la fecha de fin (Formato: yyyy-MM-dd): ");
+        Date fechaFin = Date.valueOf(scanner.nextLine());
+
+        String jpql = "SELECT j FROM Juego j WHERE j.fechaLanzamiento BETWEEN :fechaInicio AND :fechaFin";
+        List<Juego> juegos = em.createQuery(jpql, Juego.class)
+                .setParameter("fechaInicio", fechaInicio)
+                .setParameter("fechaFin", fechaFin)
+                .getResultList();
+
+        System.out.println("----- Juegos lanzados en el rango de fechas " + fechaInicio + " a " + fechaFin + " -----");
+        for (Juego juego : juegos) {
+            System.out.println(juego);
+        }
     }
 
     private static void mostrarJuegosPorPlataforma() {
-        // Implementar la consulta para mostrar juegos por plataforma
-        // ...
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("default");
+        EntityManager em = emf.createEntityManager();
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Ingrese la plataforma: ");
+        String plataforma = scanner.nextLine();
+
+        String jpql = "SELECT j FROM Juego j WHERE j.plataforma = :plataforma";
+        List<Juego> juegos = em.createQuery(jpql, Juego.class)
+                .setParameter("plataforma", plataforma)
+                .getResultList();
+
+        System.out.println("----- Juegos lanzados en la plataforma " + plataforma + " -----");
+        for (Juego juego : juegos) {
+            System.out.println(juego);
+        }
     }
 }
