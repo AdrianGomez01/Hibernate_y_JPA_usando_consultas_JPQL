@@ -6,8 +6,14 @@ import jakarta.persistence.*;
 public class Desarrollador {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false)
     private int id;
+    @Basic
+    @Column(name = "nombre", nullable = false, length = 100)
+    private String nombre;
+    @Basic
+    @Column(name = "pais", nullable = false, length = 100)
+    private String pais;
 
     public int getId() {
         return id;
@@ -17,10 +23,6 @@ public class Desarrollador {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "nombre", nullable = false, length = 100)
-    private String nombre;
-
     public String getNombre() {
         return nombre;
     }
@@ -29,10 +31,6 @@ public class Desarrollador {
         this.nombre = nombre;
     }
 
-    @Basic
-    @Column(name = "pais", nullable = false, length = 100)
-    private String pais;
-
     public String getPais() {
         return pais;
     }
@@ -40,6 +38,7 @@ public class Desarrollador {
     public void setPais(String pais) {
         this.pais = pais;
     }
+
 
     @Override
     public boolean equals(Object o) {

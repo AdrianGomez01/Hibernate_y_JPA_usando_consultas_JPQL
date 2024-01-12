@@ -3,13 +3,42 @@ package bbdd;
 import jakarta.persistence.*;
 
 import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Juego {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @jakarta.persistence.Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false)
     private int id;
+    @Basic
+    @Column(name = "titulo", nullable = false, length = 100)
+    private String titulo;
+    @Basic
+    @Column(name = "fecha_lanzamiento", nullable = false)
+    private Date fechaLanzamiento;
+    @Basic
+    @Column(name = "plataforma", nullable = false, length = 100)
+    private String plataforma;
+
+    //Creamos la relación entre Friki y Juegos (N:M)
+    @ManyToMany
+    //Introducimos en la tabla auxiliar de la relación los ids de ambas tablas relacionadas
+    @JoinTable (
+            name = "juego_desarrollador",
+            joinColumns = @JoinColumn(name = "juego_id"),
+            inverseJoinColumns = @JoinColumn(name = "desarrollador_id")
+    )
+    private Set<Desarrollador> desarrolladora = new HashSet<>();
+
+    public Set<Desarrollador> getDesarrolladora() {
+        return desarrolladora;
+    }
+
+    public void setDesarrolladora(Set<Desarrollador> desarrolladora) {
+        this.desarrolladora = desarrolladora;
+    }
 
     public int getId() {
         return id;
@@ -19,10 +48,6 @@ public class Juego {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "titulo", nullable = false, length = 100)
-    private String titulo;
-
     public String getTitulo() {
         return titulo;
     }
@@ -31,10 +56,6 @@ public class Juego {
         this.titulo = titulo;
     }
 
-    @Basic
-    @Column(name = "fecha_lanzamiento", nullable = false)
-    private Date fechaLanzamiento;
-
     public Date getFechaLanzamiento() {
         return fechaLanzamiento;
     }
@@ -42,10 +63,6 @@ public class Juego {
     public void setFechaLanzamiento(Date fechaLanzamiento) {
         this.fechaLanzamiento = fechaLanzamiento;
     }
-
-    @Basic
-    @Column(name = "plataforma", nullable = false, length = 100)
-    private String plataforma;
 
     public String getPlataforma() {
         return plataforma;

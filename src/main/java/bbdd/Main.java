@@ -35,17 +35,16 @@ public class Main {
             Desarrollador desarrollador4 = crearDesarrollador("Ubisoft", "Francia");
             Desarrollador desarrollador5 = crearDesarrollador("Square Enix", "Japón");
 
-            // Crear 10 registros en JuegoDesarrollador (asumo que los ids de juegos y desarrolladores ya existen)
-            JuegoDesarrollador registro1 = crearJuegoDesarrollador(1, 1);
-            JuegoDesarrollador registro2 = crearJuegoDesarrollador(1, 2);
-            JuegoDesarrollador registro3 = crearJuegoDesarrollador(2, 3);
-            JuegoDesarrollador registro4 = crearJuegoDesarrollador(3, 4);
-            JuegoDesarrollador registro5 = crearJuegoDesarrollador(4, 5);
-            JuegoDesarrollador registro6 = crearJuegoDesarrollador(2, 1);
-            JuegoDesarrollador registro7 = crearJuegoDesarrollador(3, 2);
-            JuegoDesarrollador registro8 = crearJuegoDesarrollador(4, 3);
-            JuegoDesarrollador registro9 = crearJuegoDesarrollador(5, 4);
-            JuegoDesarrollador registro10 = crearJuegoDesarrollador(5, 5);
+            nuevoJuego1.getDesarrolladora().add(desarrollador1);
+            nuevoJuego2.getDesarrolladora().add(desarrollador2);
+            nuevoJuego3.getDesarrolladora().add(desarrollador4);
+            nuevoJuego4.getDesarrolladora().add(desarrollador5);
+            nuevoJuego5.getDesarrolladora().add(desarrollador1);
+            nuevoJuego6.getDesarrolladora().add(desarrollador3);
+            nuevoJuego7.getDesarrolladora().add(desarrollador5);
+            nuevoJuego8.getDesarrolladora().add(desarrollador4);
+            nuevoJuego9.getDesarrolladora().add(desarrollador5);
+            nuevoJuego10.getDesarrolladora().add(desarrollador1);
 
 
             // Persistimos las instancias en la base de datos
@@ -66,19 +65,6 @@ public class Main {
             em.persist(desarrollador3);
             em.persist(desarrollador4);
             em.persist(desarrollador5);
-
-            // Persistimos los registros en la tabla JuegoDesarrollador
-            em.persist(registro1);
-            em.persist(registro2);
-            em.persist(registro3);
-            em.persist(registro4);
-            em.persist(registro5);
-            em.persist(registro6);
-            em.persist(registro7);
-            em.persist(registro8);
-            em.persist(registro9);
-            em.persist(registro10);
-
 
             // Finalizamos la transacción
             em.getTransaction().commit();
@@ -110,14 +96,6 @@ public class Main {
         nuevoDesarrollador.setNombre(nombre);
         nuevoDesarrollador.setPais(pais);
         return nuevoDesarrollador;
-    }
-
-
-    public static JuegoDesarrollador crearJuegoDesarrollador(int juegoId, int desarrolladorId) {
-        JuegoDesarrollador nuevoJuegoDesarrollador = new JuegoDesarrollador();
-        nuevoJuegoDesarrollador.setJuegoId(juegoId);
-        nuevoJuegoDesarrollador.setDesarrolladorId(desarrolladorId);
-        return nuevoJuegoDesarrollador;
     }
 
 }
